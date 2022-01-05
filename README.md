@@ -1,3 +1,5 @@
+![](Ansible_diagram.png)
+
 # Infrastructure as Code
 - Allows us to codify everything to automate processes with config management
 ## IAC with Ansible
@@ -15,11 +17,31 @@
 - ssh into controller
 - run update and upgrade commands to ensure it has internet
 - repeat for web and db
+
 `vagrant ssh controller`
 `vagrant ssh web`
 `vagrant ssh db`
-`sudo apt-get update -y`
-`sudo apt-get upgrade -y`
+```
+sudo apt-get update -y
+sudo apt-get upgrade -y
+sudo apt-get install software-properties-common -y
+sudo apt-add-repository ppa:ansible/ansible -y
+sudo apt-get install ansible -y
+ssh-keyscan -H 192.168.33.10 >> ~/.ssh/known_hosts
+ssh-keyscan -H 192.168.33.11 >> ~/.ssh/known_hosts
+sudo rm hosts
+sudo nano hosts
+
+```
+```
+[web]
+192.168.33.10 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
+
+```
+ansible
+```
+
+```
 
 ### Types of Config Management
 #### Push and Pull config Management?
