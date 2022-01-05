@@ -8,9 +8,10 @@
 - Ansible uses YAML to write playbooks (aka scripts)
 ### Why should we use Ansible?
 - Simple
-- Agentless -
+- Agentless
 - Fast
 - Dependencies include: Python
+- Compatibility with Linux-like and Microsoft
 
 ## Configuration Management
 
@@ -33,16 +34,31 @@ sudo rm hosts
 sudo nano hosts
 
 ```
+# Connecting Vagrant controller with other instances
+- Access to the hosts file
+- May be worth deleting and writing new file rather than editing
+`cd /etc/ansible`
+`sudo nano hosts`
+
+- Details to put into hosts file in controller
 ```
 [web]
 192.168.33.10 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
-
+[db]
+192.168.33.11 ansible_connection=ssh ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
 ```
-ansible
+- Accessing other instances manually
+`ssh vagrant@***IP_ADDRESS***`
+- Pinging web app, database then everything in hosts
 ```
-
+ansible web -m ping
+ansible db -m ping
+ansible all -m ping
 ```
-
+- Executing command in all instances
+`ansible all -a "SOME COMMAND"`
+- e.g.
+`ansible all -a "ls"`
 ### Types of Config Management
 #### Push and Pull config Management?
 #### Tools Available as IaC
@@ -51,6 +67,7 @@ ansible
 ### Let's create Vagrantfile to create Three VMs for Ansible architecture
 #### Ansible controller and Ansible agents
 
+- Vagrantfile Contents
 ```
 
 # -*- mode: ruby -*-
