@@ -30,9 +30,6 @@ sudo apt-add-repository ppa:ansible/ansible -y
 sudo apt-get install ansible -y
 ssh-keyscan -H 192.168.33.10 >> ~/.ssh/known_hosts
 ssh-keyscan -H 192.168.33.11 >> ~/.ssh/known_hosts
-sudo rm hosts
-sudo nano hosts
-
 ```
 # Connecting Vagrant controller with other instances
 - Access to the hosts file
