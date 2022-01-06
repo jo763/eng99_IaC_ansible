@@ -1,0 +1,59 @@
+# This is a YAML file to install nginx onto oue web VM using YAML
+---
+
+
+- hosts: web
+  gather_facts: yes
+  become: true
+
+
+  tasks:
+
+  - name: Install nodejs
+    apt: pkg=nodejs state=present
+
+
+  - name: Install npm
+    apt: pkg=npm state=present
+
+# Downloading pm2
+  - name: Install pm2
+    npm:
+      name: pm2
+      global: yes
+
+
+  - name: download latest npm
+    shell: |
+      npm install -g npm@latest
+      npm install mongoose -y
+
+
+ # - name: Copy web app into web virtual machine
+ #   synchronize:
+ #     src: /home/vagrant/app
+ #    dest: /home/vagrant
+  - name: Cloning GIT
+    git:
+      repo: https://github.com/jo763/Shahrukh_eng99_CICD
+      dest: /home/vagrant/repo
+      clone: yes
+      update: yes
+
+#  - name: Delete current nginx default file
+#    file:
+#      path: /etc/nginx/sites-enabled/default
+#      state: enable
+
+  - name: set up app
+    shell: |
+      cd /home/vagrant/
+      echo "export DB_HOST=192.168.33.11:27017" >> .bashrc
+      source .bashrc
+      cd /home/vagrant/repo/app/
+      npm install
+      node seeds/seed.js
+      pm2 kill
+      pm2 start app.js
+      cp /home/vagrant/repo/environment/app/nginx.default /etc/nginx/sites-available/default
+    become_user: root

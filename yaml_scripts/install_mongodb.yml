@@ -1,0 +1,32 @@
+# Ensure to be in /etc/ansible
+# To run ansible-playbook install_mongodb.yml
+# Installing mongo in db VM
+---
+# hosts name
+- hosts: db
+
+# gather facts for installation steps
+  gather_facts: yes
+
+# we need admin access
+  become: true
+
+# the actual task in to install mongo db in our db machine
+  tasks:
+  - name: Installing mongod in db machine
+    apt: pkg=mongodb state=present
+
+  - name: Cloning GIT
+    git:
+      repo: https://github.com/jo763/Shahrukh_eng99_CICD
+      dest: /home/vagrant/repo
+      clone: yes
+      update: yes
+  - name: Deleting and replacing mongod.conf file
+    shell: |
+      cd /etc
+      rm mongodb.conf
+      cp /home/vagrant/repo/environment/db/mongod.conf /etc/mongodb.conf
+      systemctl restart mongodb
+      systemctl enable mongodb
+    become_user: root

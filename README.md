@@ -28,9 +28,8 @@ sudo apt-get upgrade -y
 sudo apt-get install software-properties-common -y
 sudo apt-add-repository ppa:ansible/ansible -y
 sudo apt-get install ansible -y
-ssh-keyscan -H 192.168.33.10 >> ~/.ssh/known_hosts
-ssh-keyscan -H 192.168.33.11 >> ~/.ssh/known_hosts
 ```
+
 # Connecting Vagrant controller with other instances
 - Access to the hosts file
 - May be worth deleting and writing new file rather than editing
@@ -46,6 +45,13 @@ ssh-keyscan -H 192.168.33.11 >> ~/.ssh/known_hosts
 ```
 - Accessing other instances manually
 `ssh vagrant@***IP_ADDRESS***`
+- Enavling the controller to automatically enter agent nodes
+```
+ssh-keyscan -H 192.168.33.10 >> ~/.ssh/known_hosts
+ssh-keyscan -H 192.168.33.11 >> ~/.ssh/known_hosts
+```
+
+
 - Pinging web app, database then everything in hosts
 ```
 ansible web -m ping
@@ -55,6 +61,11 @@ ansible all -m ping
 - Executing command in all instances
 `ansible all -a "SOME COMMAND"`
 - e.g.
+```
+ansible all -a "sudo apt-get update -y"
+ansible all -a "sudo apt-get upgrade -y"
+ansible all -a "ls"
+```
 `ansible all -a "ls"`
 ### Types of Config Management
 #### Push and Pull config Management?
